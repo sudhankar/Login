@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080b1b" />
+  <meta name="description" content="Premium PDF tools account access" />
+  <title>Welcome — Aurora PDF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="stars" aria-hidden="true"></div>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Aurora PDF home">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>AURORA<span class="brand-light">PDF</span></span>
+      </a>
+      <div class="top-note"><span class="status-dot"></span> Your workspace, beautifully simplified</div>
+    </header>
+
+    <section class="stage">
+      <div class="intro">
+        <div class="eyebrow"><span class="eyebrow-line"></span> THE NEXT-GEN PDF WORKSPACE</div>
+        <h1>Make room for<br><span>better work.</span></h1>
+        <p class="intro-copy">Your documents. Your tools. One beautifully simple workspace.</p>
+        <div class="feature-row">
+          <div class="feature"><span class="feature-icon">✦</span><span>Fast PDF tools</span></div>
+          <div class="feature"><span class="feature-icon">⌁</span><span>Private by design</span></div>
+        </div>
+        <div class="mascot-wrap">
+          <div class="mascot-glow"></div>
+          <canvas id="mascot-canvas" aria-label="Friendly 3D assistant character"></canvas>
+          <div class="mascot-caption"><span class="caption-pulse"></span> Your little productivity companion</div>
+        </div>
+      </div>
+
+      <section class="auth-card" id="auth-card" aria-label="Account access">
+        <div class="card-shine"></div>
+        <div class="card-topline"><span class="secure-icon">♢</span><span>SECURE ACCOUNT ACCESS</span><span class="topline-spacer"></span><span class="live-pill">ENCRYPTED</span></div>
+
+        <div id="auth-view">
+          <div class="form-heading">
+            <div class="mini-kicker" id="form-kicker">WELCOME BACK</div>
+            <h2 id="form-title">Sign in<span>.</span></h2>
+            <p id="form-subtitle">Pick up right where you left off.</p>
+          </div>
+
+          <div class="mode-switch" role="tablist" aria-label="Choose sign in or create account">
+            <button type="button" class="mode-btn active" id="tab-login" role="tab" aria-selected="true">Log in</button>
+            <button type="button" class="mode-btn" id="tab-signup" role="tab" aria-selected="false">Create account</button>
+            <span class="switch-glider" id="switch-glider"></span>
+          </div>
+
+          <form id="auth-form" novalidate>
+            <div class="field" id="name-field" hidden>
+              <label for="display-name">Your name</label>
+              <div class="input-wrap"><span class="field-icon">✧</span><input id="display-name" type="text" autocomplete="name" placeholder="e.g. Alex Morgan" maxlength="60"></div>
+              <small class="field-error" id="name-error"></small>
+            </div>
+            <div class="field">
+              <label for="email">Email address</label>
+              <div class="input-wrap"><span class="field-icon">✉</span><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+              <small class="field-error" id="email-error"></small>
+            </div>
+            <div class="field">
+              <div class="label-line"><label for="password">Password</label><button type="button" class="text-button" id="forgot-link">Forgot password?</button></div>
+              <div class="input-wrap"><span class="field-icon">⌑</span><input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required minlength="6"><button type="button" class="eye-button" id="toggle-password" aria-label="Show password">◉</button></div>
+              <small class="field-error" id="password-error"></small>
+              <div class="strength" id="strength" hidden><div class="strength-track"><span id="strength-fill"></span></div><span id="strength-label">Password strength</span></div>
+            </div>
+            <div class="field" id="confirm-field" hidden>
+              <label for="confirm-password">Confirm password</label>
+              <div class="input-wrap"><span class="field-icon">⌑</span><input id="confirm-password" type="password" autocomplete="new-password" placeholder="Enter password again"></div>
+              <small class="field-error" id="confirm-error"></small>
+            </div>
+            <label class="terms-line" id="terms-line" hidden><input id="terms" type="checkbox"><span>I agree to the <a href="#" id="terms-link">Terms</a> and <a href="#" id="privacy-link">Privacy Policy</a>.</span></label>
+            <button class="primary-button" id="submit-btn" type="submit"><span id="submit-label">Sign in</span><span class="button-arrow">↗</span><span class="button-gloss"></span></button>
+          </form>
+
+          <div class="divider"><span></span><small id="bottom-note">NEW TO AURORA PDF?</small><span></span></div>
+          <p class="switch-copy" id="switch-copy">Don't have an account? <button type="button" id="switch-action">Create one</button></p>
+          <div class="privacy-note"><span>◈</span> Your account details are protected with Firebase Authentication.</div>
+        </div>
+
+        <section class="message-view" id="message-view" hidden aria-live="polite">
+          <div class="message-symbol" id="message-symbol">✉</div>
+          <div class="mini-kicker" id="message-kicker">ONE LAST STEP</div>
+          <h2 id="message-title">Check your inbox<span>.</span></h2>
+          <p id="message-text">We sent a verification link to your email address. Open it to activate your account.</p>
+          <button class="primary-button" id="resend-btn" type="button"><span>Resend verification email</span><span class="button-arrow">↗</span></button>
+          <button class="secondary-button" id="back-login-btn" type="button">Back to sign in</button>
+        </section>
+
+        <section class="message-view" id="signed-in-view" hidden aria-live="polite">
+          <div class="message-symbol success-symbol">✦</div>
+          <div class="mini-kicker">YOU'RE ALL SET</div>
+          <h2>Welcome in<span>.</span></h2>
+          <p id="signed-in-copy">Your email is verified. Your workspace is ready.</p>
+          <button class="primary-button" id="continue-btn" type="button"><span>Continue to PDF tools</span><span class="button-arrow">↗</span></button>
+          <button class="secondary-button" id="logout-btn" type="button">Sign out</button>
+        </section>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </section>
+    </section>
+    <footer class="footer"><span>© <span id="year"></span> AURORA PDF</span><span>BUILT FOR A CLEARER WORKFLOW</span><a href="./">Back to website ↗</a></footer>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
