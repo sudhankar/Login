@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Login - Indian Boy GLB</title>
+<title>Login Form Animation - Real Cute Boy</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
@@ -10,147 +10,137 @@ body{background:#000;color:#fff;height:100vh;overflow:hidden}
 .top{text-align:center;padding:14px 0 0;font-size:38px;font-weight:800;line-height:1;position:relative;z-index:5}
 .top span{color:#3b82f6}
 .skip{position:fixed;top:12px;right:12px;z-index:99;background:#fff;color:#000;border:0;padding:8px 14px;border-radius:999px;font-weight:800;cursor:pointer}
-.bubble{position:fixed;top:120px;left:50%;transform:translateX(-50%);background:#fff;color:#111;padding:10px 16px;border-radius:999px;font-weight:700;font-size:13px;opacity:0;z-index:20;white-space:nowrap}
 .stage{position:relative;height:calc(100vh - 140px);overflow:hidden}
-.carrier{position:absolute;bottom:10px;left:110%;display:flex;align-items:flex-end;z-index:6}
-.boyBox{width:300px;height:360px;flex-shrink:0}
-#boyCanvas{width:100%;height:100%;display:block}
-.carrier.pushing .boyBox{animation:pushLean .55s infinite alternate ease-in-out}
-@keyframes pushLean{from{transform:translateY(0) rotate(-.8deg)}to{transform:translateY(-4px) rotate(.8deg)}}
+.bubble{position:absolute;top:38px;left:50%;transform:translateX(-50%);background:#fff;color:#111;padding:10px 16px;border-radius:999px;font-weight:700;font-size:13px;opacity:0;z-index:20;white-space:nowrap}
+
+/* BOY SOLO - Walk ke liye */
+.boySolo{position:absolute;bottom:8px;left:-300px;width:260px;height:360px;z-index:6}
+.boySolo img{width:100%;height:100%;object-fit:contain}
+.boySolo.walk{animation:walkReal .65s infinite alternate ease-in-out}
+@keyframes walkReal{from{transform:translateY(0) rotate(1.2deg)}to{transform:translateY(-7px) rotate(-1.2deg)}}
+.boySolo.eyesClosed img{filter:brightness(.82)}
+.boySolo.sad img{content:url('boy-sad.png')}
+.boySolo.happy img{content:url('boy-happy.png')}
+
+/* CARRIER - Boy + Form EK SAATH - Kabhi alag nahi */
+.carrier{position:absolute;bottom:8px;left:110%;display:flex;align-items:flex-end;z-index:6}
+.carrier .boyPush{width:250px;height:360px;flex-shrink:0}
+.carrier .boyPush img{width:100%;height:100%;object-fit:contain}
+.carrier.pushing{animation:pushReal .6s infinite alternate ease-in-out}
+@keyframes pushReal{from{transform:translateY(0) rotate(-.7deg)}to{transform:translateY(-4px) rotate(.7deg)}}
+.carrier.happy .boyPush img{content:url('boy-happy.png')}
+.carrier.sad .boyPush img{content:url('boy-sad.png')}
 .carrier.celebrate{animation:celeJump .35s infinite alternate !important}
-@keyframes celeJump{from{transform:translateY(0)}to{transform:translateY(-16px)}}
-.formWrap{width:380px;flex-shrink:0;margin-bottom:20px;margin-left:-20px;opacity:0}
+@keyframes celeJump{from{transform:translateY(0) scale(1)}to{transform:translateY(-20px) scale(1.02)}}
+
+/* BLINK */
+.blinkEye{position:absolute;top:98px;left:170px;width:52px;height:12px;background:#111;border-radius:50%;opacity:0;z-index:10;pointer-events:none}
+.blinkEye.show{opacity:1}
+
+/* FORM */
+.formWrap{width:380px;flex-shrink:0;margin-bottom:18px;margin-left:-30px}
 .tablet{border:2px solid #38bdf8;border-radius:22px;padding:8px;background:#0b1220;box-shadow:0 0 50px rgba(56,189,248,.5)}
 .form{background:#111827;border-radius:16px;padding:20px}
-.form h2,.form p{text-align:center}.form p{color:#94a3b8;font-size:12px;margin:6px 0 12px}
+.form h2{text-align:center}.form p{text-align:center;color:#94a3b8;font-size:12px;margin:6px 0 12px}
 label{display:block;margin:12px 0 6px;font-size:12px;font-weight:700}
 input{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff;outline:none}
+input:focus{border-color:#38bdf8}
 .btn{width:100%;margin-top:16px;padding:12px;border:0;border-radius:10px;background:#2563eb;color:#fff;font-weight:800;cursor:pointer}
 .tgl{text-align:center;margin-top:12px;font-size:13px;color:#94a3b8;cursor:pointer}.tgl b{color:#38bdf8}
-.codeBar{position:fixed;bottom:0;left:0;right:0;height:52px;background:#0a0f1e;border-top:1px solid #1e293b;display:flex;align-items:center;padding:0 12px;font-size:12px;color:#7dd3fc;z-index:10}
+.codeBar{position:fixed;bottom:0;left:0;right:0;height:52px;background:#0a0f1e;border-top:1px solid #1e293b;display:flex;align-items:center;padding:0 12px;font-size:12px;color:#7dd3fc;white-space:nowrap;overflow:hidden}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:100}
-@media(max-width:640px){.boyBox{width:190px;height:250px}.formWrap{width:280px}}
+@media(max-width:640px){.boySolo{width:190px;height:260px}.carrier .boyPush{width:170px;height:240px}.formWrap{width:280px;margin-left:-15px}}
 </style>
 </head>
 <body>
 <button class="skip" onclick="skipAll()">Skip →</button>
 <div class="top">Login Form<br><span>Animation</span></div>
-<div class="bubble" id="bubble"></div>
 <div class="stage">
-  <div class="carrier" id="carrier">
-    <div class="boyBox"><canvas id="boyCanvas"></canvas></div>
-    <div class="formWrap" id="formWrap"><div class="tablet"><div class="form">
-      <h2 id="title">Welcome Back</h2><p id="sub">Please login to your account</p>
-      <label>📧 Email Address</label><input placeholder="Enter your email">
-      <label id="nameLabel" style="display:none">👤 Full Name</label><input id="nameInput" style="display:none" placeholder="Your name">
-      <label>🔒 Password</label><input type="password" id="pass" placeholder="••••••••" onfocus="eyesClosed()" onblur="eyesOpen()">
-      <button class="btn" id="mainBtn" onclick="go()">Sign In</button>
-      <div class="tgl" id="toggleText" onclick="toggleForm()">Don't have an account? <b>Create Account</b></div>
-      <p id="msg" style="text-align:center;margin-top:10px;font-size:13px"></p>
-    </div></div></div>
-  </div>
+<div class="bubble" id="bubble">Wait a second! Let me grab the login form for you!</div>
+
+<!-- Akela Boy -->
+<div class="boySolo" id="boySolo"><img id="boyImg" src="boy-walk.png"><div class="blinkEye" id="blinkEye"></div></div>
+
+<!-- Boy + Form Carrier -->
+<div class="carrier" id="carrier">
+  <div class="boyPush"><img id="pushImg" src="boy-push.png"><div class="blinkEye" id="blinkEye2" style="left:160px;top:94px"></div></div>
+  <div class="formWrap"><div class="tablet"><div class="form">
+    <h2 id="title">Welcome Back</h2><p id="sub">Please login to your account</p>
+    <label>📧 Email Address</label><input placeholder="Enter your email">
+    <label id="nameLabel" style="display:none">👤 Full Name</label><input id="nameInput" style="display:none" placeholder="Your name">
+    <label>🔒 Password</label><input type="password" id="pass" placeholder="••••••••" onfocus="eyesClosed()" onblur="eyesOpen()" oninput="eyesClosed()">
+    <button class="btn" id="mainBtn" onclick="go()">Sign In</button>
+    <div class="tgl" id="toggleText" onclick="toggleForm()">Don't have an account? <b>Create Account</b></div>
+    <p id="msg" style="text-align:center;margin-top:10px;font-size:13px"></p>
+  </div></div></div>
+</div>
 </div>
 <canvas id="confetti"></canvas>
-<div class="codeBar"><b style="color:#facc15">● ● ●</b>&nbsp; Indian Boy GLB • 100% Sync • FluxPDF</div>
+<div class="codeBar"><b style="color:#facc15">● ● ●</b>&nbsp; Wait for Boy Brings login form &nbsp;|&nbsp; FluxPDF • Real Cute Boy • GitHub Pages</div>
 
-<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
-<script type="module">
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-let bub=document.getElementById('bubble'), carrier=document.getElementById('carrier'), formWrap=document.getElementById('formWrap');
+<script>
+let boy=document.getElementById('boySolo'), carrier=document.getElementById('carrier'), bub=document.getElementById('bubble');
 function show(t){ bub.innerText=t; gsap.to(bub,{opacity:1,duration:.4}); }
 function hide(){ gsap.to(bub,{opacity:0,duration:.3}); }
 
-// ===== INDIAN BOY GLB - Sirf BoyBox ke andar =====
-let canvas=document.getElementById('boyCanvas');
-let scene=new THREE.Scene();
-let camera=new THREE.PerspectiveCamera(42, 300/360, .1, 100);
-camera.position.set(0,1.5,4.2);
-let renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-renderer.setSize(300,360); renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
-scene.add(new THREE.AmbientLight(0xffffff,1.5));
-let dir=new THREE.DirectionalLight(0xffffff,1.2); dir.position.set(2,4,4); scene.add(dir);
-let mixer=null, actions={}, model=null;
+// BLINK - Har 3 sec me Palak
+setInterval(()=>{ ['blinkEye','blinkEye2'].forEach(id=>{ let e=document.getElementById(id); if(e){ e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),140); } }); },3000);
 
-// 👉 INDIAN BOY GLB - Direct URL, Download ki zaroorat nahi
-let INDIAN_GLB='https://models.readyplayer.me/64bfa1a1c9d1a3b0e2f1a2b3.glb'; // Indian Skin Tone Base Avatar
-let FALLBACK_GLB='https://threejs.org/examples/models/gltf/Soldier.glb';
-
-function loadGLB(url, isFallback){
-  new GLTFLoader().load(url,(gltf)=>{
-    model=gltf.scene; model.scale.set(1.05,1.05,1.05); model.position.set(0,-1.45,0); scene.add(model);
-    // ===== INDIAN LOOK - Skin + Hair + Kurta Color =====
-    model.traverse((o)=>{
-      if(o.isMesh && o.material){
-        let mat=o.material;
-        let name=(o.name||'').toLowerCase();
-        // Skin - Indian Brown
-        if(name.includes('skin')||name.includes('head')||name.includes('face')||name.includes('body')||name.includes('hand')||name.includes('arm')||name.includes('leg')){
-          mat.color.set(0x8D5524); mat.roughness=0.7;
-        }
-        // Hair - Black
-        if(name.includes('hair')){
-          mat.color.set(0x111111); mat.roughness=0.9;
-        }
-        // Shirt / Kurta - Saffron Orange
-        if(name.includes('shirt')||name.includes('torso')||name.includes('jacket')||name.includes('cloth')){
-          mat.color.set(0xFF6B1A);
-        }
-        // Pant - Dark Blue
-        if(name.includes('pant')||name.includes('leg')&&name.includes('cloth')){
-          mat.color.set(0x1E3A8A);
-        }
-      }
-    });
-    mixer=new THREE.AnimationMixer(model);
-    gltf.animations.forEach(c=> actions[c.name.toLowerCase()]=mixer.clipAction(c));
-    startStory();
-  }, undefined, ()=>{
-    if(!isFallback){ loadGLB(FALLBACK_GLB, true); } // Agar Indian GLB na chale to Fallback
-  });
-}
-loadGLB(INDIAN_GLB,false);
-
-function play(n){ if(!mixer) return; let k=Object.keys(actions).find(k=>k.includes(n.toLowerCase()))||Object.keys(actions)[0]; if(!k) return; Object.values(actions).forEach(a=>a.stop()); actions[k].reset().play(); }
-let clock=new THREE.Clock();
-(function loop(){ requestAnimationFrame(loop); if(mixer) mixer.update(clock.getDelta()); renderer.render(scene,camera); })();
-
-function startStory(){
-  let tl=gsap.timeline();
-  tl.add(()=>{ show('Namaste! Rukiye, Form lekar aata hoon! 🙏'); play('Walk'); })
-    .to(carrier,{left:(innerWidth/2-150),duration:2.8,ease:'power1.inOut',onComplete:()=>play('Idle')})
-    .add(()=>{ play('Idle'); },'+=0.2').to({},{duration:2})
-    .add(()=>{ hide(); show('Rukiye, Form lekar aata hoon...'); play('Walk'); })
-    .to(carrier,{left:'110%',duration:3,ease:'power1.inOut'})
-    .add(()=>{ show('Mil gaya! Form ko dhakka dekar laa raha hoon... 💪'); play('Walk'); carrier.classList.add('pushing'); gsap.to(formWrap,{opacity:1,duration:.3}); })
-    .to(carrier,{left:(innerWidth/2-340),duration:3.5,ease:'power1.inOut',onComplete:()=>{ play('Idle'); carrier.classList.remove('pushing'); hide(); show('Lo ji, aapka Form aa gaya! ✨'); }})
-    .to({},{duration:1.5}).add(()=>hide());
-}
-window.skipAll=()=>{ gsap.killTweensOf(carrier); carrier.style.left=(innerWidth/2-340)+'px'; gsap.to(formWrap,{opacity:1}); carrier.classList.remove('pushing'); hide(); play('Idle'); };
-window.eyesClosed=()=>{ show('🙈 Main nahi dekh raha!'); if(model) gsap.to(model.rotation,{y:0.6,duration:.4}); };
-window.eyesOpen=()=>{ hide(); if(model) gsap.to(model.rotation,{y:0,duration:.4}); };
-window.toggleForm=()=>{
-  let btn=document.getElementById('mainBtn'); let isLogin=btn.innerText==='Sign In';
-  document.getElementById('title').innerText=isLogin?'Create Account':'Welcome Back';
-  document.getElementById('sub').innerText=isLogin?'Create your free account':'Please login to your account';
-  document.getElementById('nameLabel').style.display=isLogin?'block':'none';
-  document.getElementById('nameInput').style.display=isLogin?'block':'none';
-  btn.innerText=isLogin?'Create Account':'Sign In';
-  document.getElementById('toggleText').innerHTML=isLogin?`Already have an account? <b>Sign In</b>`:`Don't have an account? <b>Create Account</b>`;
-};
+// CONFETTI
 function confetti(){ let c=document.getElementById('confetti'), ctx=c.getContext('2d'); c.width=innerWidth; c.height=innerHeight; let ps=[]; for(let i=0;i<130;i++) ps.push({x:innerWidth/2,y:180,vx:(Math.random()-.5)*11,vy:Math.random()*-9-2,col:['#f472b6','#22d3ee','#a78bfa','#facc15','#4ade80'][i%5]}); let f=0; (function draw(){ ctx.clearRect(0,0,c.width,c.height); ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.32;ctx.fillStyle=p.col;ctx.fillRect(p.x,p.y,8,8)}); if(f++<90) requestAnimationFrame(draw); else ctx.clearRect(0,0,c.width,c.height); })(); }
-window.go=()=>{
+
+let tl=gsap.timeline();
+// 1. Boy SLOW Walk In - 2.2s
+tl.add(()=>{ boy.classList.add('walk'); show('Wait a second! Let me grab the login form for you! 💛'); })
+  .to(boy,{left:130,duration:2.2,ease:'power1.inOut',onComplete:()=>boy.classList.remove('walk')})
+// 2. Wave / Rukna - 1.8s
+  .add(()=>{ boy.style.transform='rotate(-2deg)'; },'+=0.2').to({},{duration:1.8})
+// 3. Boy SLOW Walk Out - Form lene gaya
+  .add(()=>{ hide(); boy.style.transform=''; boy.classList.add('walk'); })
+  .to(boy,{left:innerWidth+50,duration:2,ease:'power1.inOut',onComplete:()=>{ boy.style.display='none'; boy.classList.remove('walk'); }})
+// 4. Carrier - Boy + Form EK SAATH SLOW Push - 3s
+  .add(()=>{ carrier.classList.add('pushing'); show('Got it! Form ko dhakka dekar laa raha hoon... 💪'); })
+  .to(carrier,{left:(innerWidth/2-320),duration:3,ease:'power1.inOut'})
+  .add(()=>{ carrier.classList.remove('pushing'); hide(); show('Here is your form! ✨'); gsap.fromTo(carrier,{scale:1},{scale:1.02,yoyo:true,repeat:1,duration:.3}); },'+=0.2')
+  .to({},{duration:1.5}).add(()=>hide());
+
+function skipAll(){ tl.progress(1); boy.style.display='none'; carrier.style.left=(innerWidth/2-320)+'px'; carrier.classList.remove('pushing'); hide(); }
+
+// PASSWORD - Aankh Band + Sad Pose
+function eyesClosed(){ show('🙈 Main nahi dekh raha! Password daal lijiye'); document.getElementById('blinkEye2').classList.add('show'); document.getElementById('pushImg').src='boy-sad.png'; carrier.style.filter='brightness(.92)'; }
+function eyesOpen(){ hide(); document.getElementById('blinkEye2').classList.remove('show'); document.getElementById('pushImg').src='boy-push.png'; carrier.style.filter='none'; }
+
+// TOGGLE - FIXED
+let isLogin=true;
+function toggleForm(){
+  isLogin=!isLogin;
+  document.getElementById('title').innerText=isLogin?'Welcome Back':'Create Account';
+  document.getElementById('sub').innerText=isLogin?'Please login to your account':'Create your free account';
+  document.getElementById('nameLabel').style.display=isLogin?'none':'block';
+  document.getElementById('nameInput').style.display=isLogin?'none':'block';
+  document.getElementById('mainBtn').innerText=isLogin?'Sign In':'Create Account';
+  document.getElementById('toggleText').innerHTML=isLogin?`Don't have an account? <b>Create Account</b>`:`Already have an account? <b>Sign In</b>`;
+}
+
+// SUCCESS / FAIL
+function go(){
   let m=document.getElementById('msg');
   if(document.getElementById('pass').value.length>=4){
     m.style.color='#4ade80'; m.innerText='✅ Success! Welcome to FluxPDF';
-    show('🎉 Yay! Login ho gaya!'); confetti(); play('Jump'); carrier.classList.add('celebrate'); setTimeout(()=>carrier.classList.remove('celebrate'),1200);
+    show('🎉 Yay! Login ho gaya!'); confetti();
+    document.getElementById('pushImg').src='boy-happy.png';
+    carrier.classList.add('celebrate');
+    gsap.to(carrier,{y:-16,yoyo:true,repeat:3,duration:.25,onComplete:()=>{ carrier.classList.remove('celebrate'); document.getElementById('pushImg').src='boy-push.png'; }});
     setTimeout(()=>{ window.location.href='tools.html'; },1800);
   } else {
-    m.style.color='#f87171'; m.innerText='❌ Password galat hai';
-    show('😔 Oops! Galat ho gaya...'); play('Idle');
+    m.style.color='#f87171'; m.innerText='❌ Password galat hai, phir se try karein';
+    show('😔 Oops! Galat ho gaya...');
+    document.getElementById('pushImg').src='boy-sad.png';
+    carrier.classList.add('sad');
     gsap.fromTo(carrier,{x:-8},{x:0,duration:.5,ease:'elastic.out(1,0.3)'});
+    setTimeout(()=>{ carrier.classList.remove('sad'); document.getElementById('pushImg').src='boy-push.png'; },2200);
   }
-};
+}
 </script>
 </body>
 </html>
