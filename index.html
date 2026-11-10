@@ -1,115 +1,186 @@
-<!doctype html>
-<html lang="hi">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#080b1b" />
-  <meta name="description" content="Premium PDF tools account access" />
-  <title>Welcome — Aurora PDF</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login - Indian Boy - HTML Viewer Fix</title>
+<!-- NO MODULE - HTML Viewer Friendly -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#000;color:#fff;height:100vh;overflow:hidden}
+.top{text-align:center;padding:14px 0 0;font-size:38px;font-weight:800;line-height:1;position:relative;z-index:5}
+.top span{color:#3b82f6}
+.skip{position:fixed;top:12px;right:12px;z-index:99;background:#fff;color:#000;border:0;padding:8px 14px;border-radius:999px;font-weight:800;cursor:pointer}
+.bubble{position:fixed;top:120px;left:50%;transform:translateX(-50%);background:#fff;color:#111;padding:10px 16px;border-radius:999px;font-weight:700;font-size:13px;opacity:0;z-index:20;white-space:nowrap}
+.stage{position:relative;height:calc(100vh - 140px);overflow:hidden}
+.carrier{position:absolute;bottom:10px;left:110%;display:flex;align-items:flex-end;z-index:6}
+.boyBox{width:300px;height:360px;flex-shrink:0;position:relative;background:transparent}
+#boyCanvas{width:100%;height:100%;display:block}
+#boyFallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;font-size:110px;line-height:1}
+#boyFallback small{font-size:14px;background:#fff;color:#111;padding:6px 12px;border-radius:999px;margin-bottom:10px;font-weight:700}
+#boyFallback .boyFace{font-size:130px;filter:drop-shadow(0 10px 10px rgba(0,0,0,.5))}
+.carrier.pushing .boyBox{animation:pushLean .55s infinite alternate ease-in-out}
+@keyframes pushLean{from{transform:translateY(0) rotate(-.8deg)}to{transform:translateY(-4px) rotate(.8deg)}}
+.carrier.celebrate{animation:celeJump .35s infinite alternate !important}
+@keyframes celeJump{from{transform:translateY(0)}to{transform:translateY(-16px)}}
+.formWrap{width:380px;flex-shrink:0;margin-bottom:20px;margin-left:-20px;opacity:0}
+.tablet{border:2px solid #38bdf8;border-radius:22px;padding:8px;background:#0b1220;box-shadow:0 0 50px rgba(56,189,248,.5)}
+.form{background:#111827;border-radius:16px;padding:20px}
+.form h2,.form p{text-align:center}.form p{color:#94a3b8;font-size:12px;margin:6px 0 12px}
+label{display:block;margin:12px 0 6px;font-size:12px;font-weight:700}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff;outline:none}
+.btn{width:100%;margin-top:16px;padding:12px;border:0;border-radius:10px;background:#2563eb;color:#fff;font-weight:800;cursor:pointer}
+.tgl{text-align:center;margin-top:12px;font-size:13px;color:#94a3b8;cursor:pointer}.tgl b{color:#38bdf8}
+.codeBar{position:fixed;bottom:0;left:0;right:0;height:52px;background:#0a0f1e;border-top:1px solid #1e293b;display:flex;align-items:center;padding:0 12px;font-size:12px;color:#7dd3fc;z-index:10}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:100}
+#debug{position:fixed;top:50px;left:10px;background:#fef08a;color:#000;font-size:11px;padding:6px 10px;border-radius:8px;z-index:100}
+@media(max-width:640px){.boyBox{width:190px;height:250px}.formWrap{width:280px}}
+</style>
 </head>
 <body>
-  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
-  <div class="stars" aria-hidden="true"></div>
-  <main class="shell">
-    <header class="topbar">
-      <a class="brand" href="./" aria-label="Aurora PDF home">
-        <span class="brand-mark"><span></span><span></span><span></span></span>
-        <span>AURORA<span class="brand-light">PDF</span></span>
-      </a>
-      <div class="top-note"><span class="status-dot"></span> Your workspace, beautifully simplified</div>
-    </header>
+<button class="skip" onclick="skipAll()">Skip →</button>
+<div id="debug">Loading Boy... ⏳</div>
+<div class="top">Login Form<br><span>Animation</span></div>
+<div class="bubble" id="bubble"></div>
+<div class="stage">
+  <div class="carrier" id="carrier">
+    <div class="boyBox">
+      <canvas id="boyCanvas"></canvas>
+      <!-- FALLBACK - Agar GLB na chale to ye Indian Boy dikhega, Khali nahi rahega -->
+      <div id="boyFallback"><small>👋 Namaste!</small><div class="boyFace">👦🏾</div><div style="font-size:28px;margin-top:-10px">🧡 Kurta Boy</div></div>
+    </div>
+    <div class="formWrap" id="formWrap"><div class="tablet"><div class="form">
+      <h2 id="title">Welcome Back</h2><p id="sub">Please login to your account</p>
+      <label>📧 Email Address</label><input placeholder="Enter your email">
+      <label id="nameLabel" style="display:none">👤 Full Name</label><input id="nameInput" style="display:none" placeholder="Your name">
+      <label>🔒 Password</label><input type="password" id="pass" placeholder="••••••••" onfocus="eyesClosed()" onblur="eyesOpen()">
+      <button class="btn" id="mainBtn" onclick="go()">Sign In</button>
+      <div class="tgl" id="toggleText" onclick="toggleForm()">Don't have an account? <b>Create Account</b></div>
+      <p id="msg" style="text-align:center;margin-top:10px;font-size:13px"></p>
+    </div></div></div>
+  </div>
+</div>
+<canvas id="confetti"></canvas>
+<div class="codeBar"><b style="color:#facc15">● ● ●</b>&nbsp; HTML Viewer Fix • Indian Boy • FluxPDF</div>
 
-    <section class="stage">
-      <div class="intro">
-        <div class="eyebrow"><span class="eyebrow-line"></span> THE NEXT-GEN PDF WORKSPACE</div>
-        <h1>Make room for<br><span>better work.</span></h1>
-        <p class="intro-copy">Your documents. Your tools. One beautifully simple workspace.</p>
-        <div class="feature-row">
-          <div class="feature"><span class="feature-icon">✦</span><span>Fast PDF tools</span></div>
-          <div class="feature"><span class="feature-icon">⌁</span><span>Private by design</span></div>
-        </div>
-        <div class="mascot-wrap">
-          <div class="mascot-glow"></div>
-          <canvas id="mascot-canvas" aria-label="Friendly 3D assistant character"></canvas>
-          <div class="mascot-caption"><span class="caption-pulse"></span> Your little productivity companion</div>
-        </div>
-      </div>
+<script>
+// ===== NO MODULE - Sab Normal Script - HTML Viewer me chalega =====
+var bub=document.getElementById('bubble'), carrier=document.getElementById('carrier'), formWrap=document.getElementById('formWrap'), debug=document.getElementById('debug');
+function show(t){ bub.innerText=t; gsap.to(bub,{opacity:1,duration:.4}); }
+function hide(){ gsap.to(bub,{opacity:0,duration:.3}); }
+function setDebug(t){ debug.innerText=t; }
 
-      <section class="auth-card" id="auth-card" aria-label="Account access">
-        <div class="card-shine"></div>
-        <div class="card-topline"><span class="secure-icon">♢</span><span>SECURE ACCOUNT ACCESS</span><span class="topline-spacer"></span><span class="live-pill">ENCRYPTED</span></div>
+// Check Three.js loaded?
+if(typeof THREE==='undefined'){ setDebug('❌ Internet nahi hai / Three.js Block hai - Fallback Boy dikhega'); }
+else{ setDebug('✅ Three.js Loaded - Boy Load ho raha hai...'); }
 
-        <div id="auth-view">
-          <div class="form-heading">
-            <div class="mini-kicker" id="form-kicker">WELCOME BACK</div>
-            <h2 id="form-title">Sign in<span>.</span></h2>
-            <p id="form-subtitle">Pick up right where you left off.</p>
-          </div>
+var canvas=document.getElementById('boyCanvas');
+var scene=new THREE.Scene();
+var camera=new THREE.PerspectiveCamera(42, 300/360, .1, 100);
+camera.position.set(0,1.5,4.2);
+var renderer=null;
+try{
+  renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
+  renderer.setSize(300,360);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
+}catch(e){ setDebug('❌ WebGL Block hai - Fallback Boy dikhega'); }
 
-          <div class="mode-switch" role="tablist" aria-label="Choose sign in or create account">
-            <button type="button" class="mode-btn active" id="tab-login" role="tab" aria-selected="true">Log in</button>
-            <button type="button" class="mode-btn" id="tab-signup" role="tab" aria-selected="false">Create account</button>
-            <span class="switch-glider" id="switch-glider"></span>
-          </div>
+if(renderer){
+  scene.add(new THREE.AmbientLight(0xffffff,1.5));
+  var dir=new THREE.DirectionalLight(0xffffff,1.2); dir.position.set(2,4,4); scene.add(dir);
+}
+var mixer=null, actions={}, model=null;
+var INDIAN_GLB='https://threejs.org/examples/models/gltf/Soldier.glb';
 
-          <form id="auth-form" novalidate>
-            <div class="field" id="name-field" hidden>
-              <label for="display-name">Your name</label>
-              <div class="input-wrap"><span class="field-icon">✧</span><input id="display-name" type="text" autocomplete="name" placeholder="e.g. Alex Morgan" maxlength="60"></div>
-              <small class="field-error" id="name-error"></small>
-            </div>
-            <div class="field">
-              <label for="email">Email address</label>
-              <div class="input-wrap"><span class="field-icon">✉</span><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-              <small class="field-error" id="email-error"></small>
-            </div>
-            <div class="field">
-              <div class="label-line"><label for="password">Password</label><button type="button" class="text-button" id="forgot-link">Forgot password?</button></div>
-              <div class="input-wrap"><span class="field-icon">⌑</span><input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required minlength="6"><button type="button" class="eye-button" id="toggle-password" aria-label="Show password">◉</button></div>
-              <small class="field-error" id="password-error"></small>
-              <div class="strength" id="strength" hidden><div class="strength-track"><span id="strength-fill"></span></div><span id="strength-label">Password strength</span></div>
-            </div>
-            <div class="field" id="confirm-field" hidden>
-              <label for="confirm-password">Confirm password</label>
-              <div class="input-wrap"><span class="field-icon">⌑</span><input id="confirm-password" type="password" autocomplete="new-password" placeholder="Enter password again"></div>
-              <small class="field-error" id="confirm-error"></small>
-            </div>
-            <label class="terms-line" id="terms-line" hidden><input id="terms" type="checkbox"><span>I agree to the <a href="#" id="terms-link">Terms</a> and <a href="#" id="privacy-link">Privacy Policy</a>.</span></label>
-            <button class="primary-button" id="submit-btn" type="submit"><span id="submit-label">Sign in</span><span class="button-arrow">↗</span><span class="button-gloss"></span></button>
-          </form>
+function onBoyLoaded(gltf){
+  setDebug('✅ Indian Boy Load Ho Gaya! 🎉');
+  document.getElementById('boyFallback').style.display='none';
+  model=gltf.scene; model.scale.set(1.05,1.05,1.05); model.position.set(0,-1.45,0); scene.add(model);
+  // Indian Skin Tone
+  model.traverse(function(o){
+    if(o.isMesh && o.material){
+      var n=(o.name||'').toLowerCase();
+      if(n.indexOf('skin')>=0||n.indexOf('head')>=0||n.indexOf('body')>=0||n.indexOf('hand')>=0||n.indexOf('arm')>=0){
+        o.material.color.set(0x8D5524);
+      }
+      if(n.indexOf('shirt')>=0||n.indexOf('torso')>=0){ o.material.color.set(0xFF6B1A); }
+    }
+  });
+  mixer=new THREE.AnimationMixer(model);
+  gltf.animations.forEach(function(c){ actions[c.name.toLowerCase()]=mixer.clipAction(c); });
+  startStory();
+}
+function tryLoadGLB(){
+  if(typeof THREE==='undefined' || !renderer || typeof THREE.GLTFLoader==='undefined'){
+    setDebug('⚠️ GLB Block hai - Fallback Indian Boy chal raha hai');
+    startStory(); return;
+  }
+  new THREE.GLTFLoader().load(INDIAN_GLB, onBoyLoaded, undefined, function(err){
+    setDebug('⚠️ GLB Load Fail (HTML Viewer CORS) - Fallback Boy chal raha hai');
+    startStory();
+  });
+  // 4 sec me bhi na aaye to Fallback se Story chala do
+  setTimeout(function(){ if(!model){ setDebug('⚠️ GLB Slow hai - Fallback Boy se chala diya'); } },4000);
+}
+function play(n){
+  if(!mixer) return;
+  var keys=Object.keys(actions);
+  var k=null;
+  for(var i=0;i<keys.length;i++){ if(keys[i].indexOf(n.toLowerCase())>=0){ k=keys[i]; break; } }
+  if(!k) k=keys[0]; if(!k) return;
+  Object.values(actions).forEach(function(a){ a.stop(); });
+  actions[k].reset().play();
+}
+var clock=new THREE.Clock();
+(function loop(){
+  requestAnimationFrame(loop);
+  if(mixer) mixer.update(clock.getDelta());
+  if(renderer) renderer.render(scene,camera);
+})();
 
-          <div class="divider"><span></span><small id="bottom-note">NEW TO AURORA PDF?</small><span></span></div>
-          <p class="switch-copy" id="switch-copy">Don't have an account? <button type="button" id="switch-action">Create one</button></p>
-          <div class="privacy-note"><span>◈</span> Your account details are protected with Firebase Authentication.</div>
-        </div>
+var storyStarted=false;
+function startStory(){
+  if(storyStarted) return; storyStarted=true;
+  var tl=gsap.timeline();
+  tl.add(function(){ show('Namaste! Rukiye, Form lekar aata hoon! 🙏'); play('Walk'); })
+    .to(carrier,{left:(window.innerWidth/2-150),duration:2.8,ease:'power1.inOut',onComplete:function(){ play('Idle'); }})
+    .add(function(){ play('Idle'); },'+=0.2').to({},{duration:2})
+    .add(function(){ hide(); show('Rukiye, Form lekar aata hoon...'); play('Walk'); })
+    .to(carrier,{left:'110%',duration:3,ease:'power1.inOut'})
+    .add(function(){ show('Mil gaya! Form ko dhakka dekar laa raha hoon... 💪'); play('Walk'); carrier.classList.add('pushing'); gsap.to(formWrap,{opacity:1,duration:.3}); })
+    .to(carrier,{left:(window.innerWidth/2-340),duration:3.5,ease:'power1.inOut',onComplete:function(){ play('Idle'); carrier.classList.remove('pushing'); hide(); show('Lo ji, aapka Form aa gaya! ✨'); }})
+    .to({},{duration:1.5}).add(function(){ hide(); });
+}
+tryLoadGLB();
 
-        <section class="message-view" id="message-view" hidden aria-live="polite">
-          <div class="message-symbol" id="message-symbol">✉</div>
-          <div class="mini-kicker" id="message-kicker">ONE LAST STEP</div>
-          <h2 id="message-title">Check your inbox<span>.</span></h2>
-          <p id="message-text">We sent a verification link to your email address. Open it to activate your account.</p>
-          <button class="primary-button" id="resend-btn" type="button"><span>Resend verification email</span><span class="button-arrow">↗</span></button>
-          <button class="secondary-button" id="back-login-btn" type="button">Back to sign in</button>
-        </section>
-
-        <section class="message-view" id="signed-in-view" hidden aria-live="polite">
-          <div class="message-symbol success-symbol">✦</div>
-          <div class="mini-kicker">YOU'RE ALL SET</div>
-          <h2>Welcome in<span>.</span></h2>
-          <p id="signed-in-copy">Your email is verified. Your workspace is ready.</p>
-          <button class="primary-button" id="continue-btn" type="button"><span>Continue to PDF tools</span><span class="button-arrow">↗</span></button>
-          <button class="secondary-button" id="logout-btn" type="button">Sign out</button>
-        </section>
-        <div class="toast" id="toast" role="status" aria-live="polite"></div>
-      </section>
-    </section>
-    <footer class="footer"><span>© <span id="year"></span> AURORA PDF</span><span>BUILT FOR A CLEARER WORKFLOW</span><a href="./">Back to website ↗</a></footer>
-  </main>
-
-  <script type="module" src="./app.js"></script>
+function skipAll(){ gsap.killTweensOf(carrier); carrier.style.left=(window.innerWidth/2-340)+'px'; gsap.to(formWrap,{opacity:1}); carrier.classList.remove('pushing'); hide(); play('Idle'); }
+function eyesClosed(){ show('🙈 Main nahi dekh raha!'); if(model) gsap.to(model.rotation,{y:0.6,duration:.4}); }
+function eyesOpen(){ hide(); if(model) gsap.to(model.rotation,{y:0,duration:.4}); }
+function toggleForm(){
+  var btn=document.getElementById('mainBtn'); var isLogin=btn.innerText==='Sign In';
+  document.getElementById('title').innerText=isLogin?'Create Account':'Welcome Back';
+  document.getElementById('sub').innerText=isLogin?'Create your free account':'Please login to your account';
+  document.getElementById('nameLabel').style.display=isLogin?'block':'none';
+  document.getElementById('nameInput').style.display=isLogin?'block':'none';
+  btn.innerText=isLogin?'Create Account':'Sign In';
+  document.getElementById('toggleText').innerHTML=isLogin?`Already have an account? <b>Sign In</b>`:`Don't have an account? <b>Create Account</b>`;
+}
+function confetti(){ var c=document.getElementById('confetti'), ctx=c.getContext('2d'); c.width=innerWidth; c.height=innerHeight; var ps=[]; for(var i=0;i<130;i++) ps.push({x:innerWidth/2,y:180,vx:(Math.random()-.5)*11,vy:Math.random()*-9-2,col:['#f472b6','#22d3ee','#a78bfa','#facc15','#4ade80'][i%5]}); var f=0; (function draw(){ ctx.clearRect(0,0,c.width,c.height); ps.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=0.32;ctx.fillStyle=p.col;ctx.fillRect(p.x,p.y,8,8)}); if(f++<90) requestAnimationFrame(draw); else ctx.clearRect(0,0,c.width,c.height); })(); }
+function go(){
+  var m=document.getElementById('msg');
+  if(document.getElementById('pass').value.length>=4){
+    m.style.color='#4ade80'; m.innerText='✅ Success! Welcome to FluxPDF';
+    show('🎉 Yay! Login ho gaya!'); confetti(); play('Jump'); carrier.classList.add('celebrate'); setTimeout(function(){ carrier.classList.remove('celebrate'); },1200);
+    setTimeout(function(){ window.location.href='tools.html'; },1800);
+  } else {
+    m.style.color='#f87171'; m.innerText='❌ Password galat hai';
+    show('😔 Oops! Galat ho gaya...'); play('Idle');
+    gsap.fromTo(carrier,{x:-8},{x:0,duration:.5,ease:'elastic.out(1,0.3)'});
+  }
+}
+</script>
 </body>
-</html>
+    </html>
